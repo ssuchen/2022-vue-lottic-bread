@@ -29,7 +29,7 @@
     <div class="row position-absolute menu-title">
       <div class="col">
         <!-- <img src="" alt="閣樓面包坊" /> -->
-        <h1>THE<span></span>LOTTIC<span></span>BREAD</h1>
+        <h1>THE<span></span>LOTTIC<span></span>11BREAD</h1>
         <p class="subtitle">
           Happiness is not about being immortal nor having food or rights in
           one’s hand、<span></span> It’s about having each tiny wish come true,
