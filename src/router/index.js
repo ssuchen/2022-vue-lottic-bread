@@ -43,6 +43,11 @@ const routes = [
         name: "checkout",
         component: () => import("../views/front/CheckoutView.vue"),
       },
+      {
+        path: "Paymoney",
+        name: "Paymoney",
+        component: () => import("../views/front/PaymoneyView.vue"),
+      },
     ],
   },
   {

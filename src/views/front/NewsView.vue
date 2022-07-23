@@ -1,3 +1,5 @@
 <template>
-  <div class="">這是最新消息</div>
+  <div class="">
+    <p>這是最新消息</p>
+  </div>
 </template>
