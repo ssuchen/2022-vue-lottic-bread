@@ -1,4 +1,12 @@
 <script>
+// import mitt from "mitt";
+// const emitter = mitt();
+
+// export default {
+//   return() {
+//     emitter;
+//   },
+// };
 // import MenuNav from "@/components/MenuNav.vue";
 // import Footer from "@/components/Footer.vue";
 // export default {

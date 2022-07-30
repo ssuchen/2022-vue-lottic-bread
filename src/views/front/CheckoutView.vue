@@ -1,17 +1,9 @@
 <script>
-//表單驗證
-//=====================
-//***標單套件
-//=====================
-// import { Field, Form } from "vee-validate";
-
 export default {
-  // components: {
-  //   Field,
-  //   Form,
-  // },
   data() {
     return {
+      cart: [],
+      total: "",
       form: {
         user: {
           name: "",
@@ -24,12 +16,30 @@ export default {
     };
   },
   methods: {
+    getCartList() {
+      //1.API獲取商品資料
+      const apiUrl = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/cart`;
+      this.$http
+        .get(apiUrl)
+        .then((res) => {
+          // console.log(res.data.data.carts);
+          //獲取購物車列表
+          this.cart = res.data.data.carts;
+          console.log(this.cart);
+          //獲取購物車總金額
+          this.total = res.data.data.final_total;
+          // console.log(res.data.data.final_total);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     // Validator function
     isRequired(value) {
       return value ? true : "This field is required";
     },
     removeCartAll() {
-      const apiUrl = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/carts`;
+      const apiUrl = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/cart`;
       this.$http
         .delete(apiUrl)
         .then((res) => {
@@ -41,6 +51,7 @@ export default {
         });
     },
     submitOrder() {
+      //取得訂單id
       const apiUrl = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/order`;
       const order = this.form;
       this.$http
@@ -51,16 +62,27 @@ export default {
           this.$refs.form.resetForm();
           this.removeCartAll();
           //轉至結帳網址
-          this.$router.push({ path: "/Paymoney" });
+          this.$router.push({ path: `/pay/${res.data.orderId}` });
         })
         .catch((err) => {
           alert(err);
         });
     },
   },
+  mounted() {
+    this.getCartList();
+  },
 };
 </script>
 <template>
+  <div class="">
+    <ul>
+      <li v-for="item in cart" :key="item.id">
+        {{ item.product.title }}
+      </li>
+    </ul>
+    <div class="">{{ total }}</div>
+  </div>
   <div class="my-5 row justify-content-center">
     <Form ref="form" v-slot="{ errors }" class="col-md-6" @submit="submitOrder">
       <div class="mb-3">
@@ -132,7 +154,7 @@ export default {
       </div>
 
       <div class="text-end">
-        <button type="submit" class="btn btn-danger">送出訂單</button>
+        <button type="submit" class="btn btn-danger">下一步</button>
       </div>
     </Form>
   </div>

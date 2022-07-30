@@ -33,8 +33,9 @@
           >
 
           <router-link class="nav-link text-center" to="/cart"
-            >我的購物車</router-link
-          >
+            >我的購物車
+            <span>{{ len }}</span>
+          </router-link>
 
           <router-link class="nav-link text-center" to="/admin"
             >後台管理</router-link
@@ -59,7 +60,38 @@
 </template>
 
 <script>
-export default {};
+import emitter from "@/assets/js/mitt";
+export default {
+  data() {
+    return {
+      len: 0,
+    };
+  },
+  methods: {
+    //得到購物車內容數量
+    getCartsLen() {
+      //1.API獲取資料
+      const apiUrl = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/cart`;
+      this.$http
+        .get(apiUrl)
+        .then((res) => {
+          this.len = res.data.data.carts.length;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    updateCartLen() {
+      emitter.on("cartLenData", (data) => {
+        this.len = data;
+      });
+    },
+  },
+  mounted() {
+    this.getCartsLen();
+    this.updateCartLen();
+  },
+};
 </script>
 
 <style></style>

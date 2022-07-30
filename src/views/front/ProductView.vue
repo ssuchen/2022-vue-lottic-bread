@@ -1,10 +1,12 @@
 <script>
+import emitter from "@/assets/js/mitt";
 export default {
   data() {
     return {
       product: [],
       id: "",
       qty: 1,
+      cartLenData: 0,
     };
   },
   methods: {
@@ -30,11 +32,28 @@ export default {
           qty: this.qty,
         },
       };
-      console.log(addId);
+      // console.log(addId);
       this.$http
         .post(apiUrl, addId)
         .then((res) => {
           console.log(res);
+          this.getCartsLen();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    //得到購物車內容數量
+    getCartsLen() {
+      //1.API獲取資料
+      const apiUrl = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/cart`;
+      this.$http
+        .get(apiUrl)
+        .then((res) => {
+          this.cartLenData = res.data.data.carts.length;
+          console.log(res.data.data.carts.length, this.cartLenData);
+          //獲得購物車列表長度 mitt 跨元件傳遞(傳到nav 改變購物車數量)
+          emitter.emit("cartLenData", this.cartLenData);
         })
         .catch((err) => {
           console.log(err);
@@ -44,6 +63,7 @@ export default {
   mounted() {
     this.id = this.$route.params.id;
     this.getProduct(this.id);
+    this.getCartsLen();
   },
 };
 </script>
@@ -122,14 +142,12 @@ export default {
     </div>
     <div class="row my-5">
       <div class="col-md-3">
-        <p class="text-muted">
+        <!-- <p class="text-muted">
           {{ product.content }}
-        </p>
+        </p> -->
       </div>
       <div class="col-md-4">
-        <p>
-          {{ product.description }}
-        </p>
+        <p v-html="product.description"></p>
       </div>
     </div>
   </div>

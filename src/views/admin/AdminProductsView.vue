@@ -40,9 +40,10 @@ export default {
         .then((res) => {
           //2.將資料載入
           this.products = res.data.products;
+          console.log(this.products);
           //傳出api＿pagination物件
           this.pagenation = res.data.pagination;
-          // console.log(this.pagenation);
+          console.log(this.pagenation);
         })
         .catch((err) => {
           console.log(err);

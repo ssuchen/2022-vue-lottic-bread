@@ -7,6 +7,9 @@ export default {
   },
   data() {
     return {
+      product: [],
+      id: "",
+      qty: 1,
       //產品列表
       products: [],
       product_id: "",
@@ -22,6 +25,27 @@ export default {
           console.log(res.data.products);
           this.products = res.data.products;
           // console.log(this.products);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    //加入購物車
+    addToCart(productId) {
+      console.log("click");
+      this.id = productId;
+      const apiUrl = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/cart`;
+      const addId = {
+        data: {
+          product_id: this.id,
+          qty: this.qty,
+        },
+      };
+      console.log(addId);
+      this.$http
+        .post(apiUrl, addId)
+        .then((res) => {
+          console.log(res);
         })
         .catch((err) => {
           console.log(err);
@@ -70,6 +94,9 @@ export default {
                 <p class="card-text">
                   {{ product.description }}
                 </p>
+                <button @click.prevent="addToCart(product.id)">
+                  加到購物車
+                </button>
               </div>
             </div>
           </router-link>
