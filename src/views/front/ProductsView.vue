@@ -32,7 +32,6 @@ export default {
     },
     //加入購物車
     addToCart(productId) {
-      console.log("click");
       this.id = productId;
       const apiUrl = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/cart`;
       const addId = {
@@ -41,7 +40,7 @@ export default {
           qty: this.qty,
         },
       };
-      console.log(addId);
+      // console.log(addId);
       this.$http
         .post(apiUrl, addId)
         .then((res) => {
@@ -69,7 +68,7 @@ export default {
   <Banner />
   <div class="">產品列表</div>
   <!-- menu nav bar start-->
-  <nav class="nav d-flex justify-content-center">
+  <!-- <nav class="nav d-flex justify-content-center">
     <router-link class="nav-link text-center" to="/about">關於我們</router-link>
     <router-link class="nav-link text-center" to="/news">最新消息</router-link>
     <router-link class="nav-link text-center" to="/">首頁</router-link>
@@ -79,7 +78,7 @@ export default {
     <router-link class="nav-link text-center" to="/products"
       >產品列表</router-link
     >
-  </nav>
+  </nav> -->
   <!-- menu nav bar end-->
   <!-- <router-view /> -->
   <section>
@@ -88,15 +87,19 @@ export default {
         <div v-for="product in products" :key="product.id" class="col">
           <router-link :to="`/product/${product.id}`">
             <div class="card">
-              <img :src="product.imageUrl" class="card-img-top" alt="" />
+              <div class="card-img">
+                <img :src="product.imageUrl" class="card-img-top" alt="" />
+              </div>
               <div class="card-body">
                 <h5 class="card-title">{{ product.title }}</h5>
-                <p class="card-text">
-                  {{ product.description }}
-                </p>
-                <button @click.prevent="addToCart(product.id)">
-                  加到購物車
-                </button>
+                <div class="text-item small">
+                  <span>原售價</span>
+                  <p>{{ product.price }}</p>
+                </div>
+                <div class="text-item">
+                  <span>$</span>
+                  <p>{{ product.origin_price }}</p>
+                </div>
               </div>
             </div>
           </router-link>
@@ -105,3 +108,61 @@ export default {
     </div>
   </section>
 </template>
+<style lang="scss">
+a {
+  text-decoration: none;
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+.card {
+  border-radius: 0.5em;
+  padding: 1em;
+  // background: #f3f3f3;
+  border: 0px;
+  p {
+    margin-bottom: 0;
+  }
+}
+.card-img {
+  background: #f3f3f3;
+  border-radius: 0.5em;
+  padding: 0.5em;
+  height: 14em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 1s;
+  img {
+    transform: scale(1);
+    transition: all 1s;
+  }
+}
+.card {
+  padding: 1em 0 0 0;
+  .text-item {
+    display: flex;
+    color: #212529;
+  }
+  &:hover {
+    .card-img {
+      background: rgb(222, 214, 214);
+      transition: all 1s;
+      img {
+        transform: scale(1.1);
+        transition: all 1s;
+      }
+    }
+  }
+}
+.card-body {
+  padding: 0.5em 0 0 0;
+}
+.card-title {
+  color: #212529;
+  font-size: 1.15em;
+  font-weight: 600;
+  margin-bottom: 0;
+}
+</style>
